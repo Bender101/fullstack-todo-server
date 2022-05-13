@@ -6,7 +6,7 @@ const signIn = async (req, res) => {
   if (password && name) {
     try {
       const currentUser = await Admin.findOne({ where: { name: name } });
-      if (currentUser && currentUser.password === password) {
+      if (currentUser.name === name && currentUser.password === password) {
         req.session.user = {
           id: currentUser.id,
           name: currentUser.name,
@@ -15,8 +15,9 @@ const signIn = async (req, res) => {
           id: currentUser.id,
           name: currentUser.name,
         });
+      } else {
+        return res.json({ message: "not valid" });
       }
-      return res.sendStatus(401);
     } catch (error) {
       return res.sendStatus(500);
     }

@@ -16,8 +16,8 @@ const addTodo = async (req, res) => {
     const { name, email, text, status } = req.body;
 
     if (name && email && text) {
-      const test = await Task.create({ name, email, text, status });
-      res.json(test);
+      const newTodo = await Task.create({ name, email, text, status, updated:false });
+      res.json(newTodo);
     }
   } catch (error) {
     return res.sendStatus(500);
@@ -55,7 +55,11 @@ const changeStatus = async (req, res) => {
 const updateTodo = async (req, res) => {
   try {
     const { id, editInput } = req.body;
-    await Task.update({ text: editInput }, { where: { id: +id } });
+    const checkEqualText = await Task.findOne({where: id})
+    if (checkEqualText.text === editInput) {
+      return res.json({message: 'not valid'})
+    }
+    await Task.update({ text: editInput , updated: true}, { where: { id: +id } });
     const updatedTodo = await Task.findOne({ where: { id: +id } });
    res.json({text: updatedTodo.text, id})
   } catch (error) {
