@@ -45,7 +45,6 @@ const checkAuth = async (req, res) => {
 };
 
 const checkIfLoggedIn = async (req, res) => {
-  console.log(req.session);
   if (req.session.user.id) {
     const currentUser = await Admin.findByPk(req.session.user.id);
     return res.json({

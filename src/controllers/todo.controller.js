@@ -37,9 +37,7 @@ const removeTodo = async (req, res) => {
 const changeStatus = async (req, res) => {
   try {
     const { id } = req.body;
-    console.log(id);
     const updatedStatus = await Task.findOne({ where: { id: +id } });
-    console.log(updatedStatus.status);
     if (!updatedStatus.status) {
       await Task.update({ status: true }, { where: { id: +id } });
     } else {
